@@ -1,0 +1,42 @@
+{
+  "name": "PancakeSwap",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf ./cache/ ./artifacts/",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:farm": "hardhat run scripts/deploy-farm.js --network monad",
+    "deploy:token": "hardhat run scripts/deploy-token.js --network monad",
+    "test:farm": "hardhat run scripts/test-farm.js --network monad",
+    "verify:all": "hardhat run scripts/verify-all-contracts.js --network monad",
+    "verify:manual-guide": "hardhat run scripts/manual-verify-guide.js --network monad",
+    "flatten:contracts": "hardhat run scripts/flatten-contracts.js",
+    "flatten:mmf": "hardhat flatten contracts/CakeToken.sol > flattened/CakeToken-flattened.sol",
+    "flatten:syrup": "hardhat flatten contracts/SyrupBar.sol > flattened/SyrupBar-flattened.sol",
+    "flatten:masterchef": "hardhat flatten contracts/MasterChef.sol > flattened/MasterChef-flattened.sol",
+    "status:check": "hardhat run scripts/check-contract-status.js --network monad",
+    "node": "hardhat node"
+  },
+  "dependencies": {
+    "@openzeppelin/test-helpers": "^0.5.6",
+    "@pancakeswap/pancake-swap-lib": "^0.0.1",
+    "truffle": "^5.1.58",
+    "truffle-flattener": "^1.4.4"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-etherscan": "^3.1.7",
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "chai": "^4.2.0",
+    "dotenv": "^16.0.3",
+    "ethereum-waffle": "^3.0.0",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.17.2",
+    "hardhat-deploy": "^0.11.34",
+    "solidity-coverage": "^0.7.13",
+    "truffle-hdwallet-provider": "^1.0.17",
+    "truffle-plugin-verify": "^0.4.0",
+    "web3": "^1.3.0"
+  }
+}

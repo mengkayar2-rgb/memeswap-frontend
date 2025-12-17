@@ -1,0 +1,11 @@
+{
+  "network": "monad",
+  "chainId": 143,
+  "factoryAddress": "0xb48dBe6D4130f4a664075250EE702715748051d9",
+  "initCodeHash": "0x67bc0babb7c46b28f84870387b02369e61d55e3b07da260cfeb73b382d275293",
+  "deployer": "0xc04AfA16f7eAE1a51dc8d5159f113a03dB1DF102",
+  "feeToSetter": "0xc04AfA16f7eAE1a51dc8d5159f113a03dB1DF102",
+  "deploymentTime": "2025-12-11T20:43:47.421Z",
+  "transactionHash": "0x554c588108613bdd058bd0de846a57eb5736d41edebb957ca01ccd03e1eaa563",
+  "gasUsed": "3124853"
+}

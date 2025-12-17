@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "chains": {
+    "monad": {
+      "chainId": 143,
+      "rpcUrl": "https://rpc.monad.xyz"
+    }
+  }
+}

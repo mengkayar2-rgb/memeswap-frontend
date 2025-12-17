@@ -1,0 +1,67 @@
+# ============================================
+# MASTER .gitignore for PANCAKESWAP-PROJECT
+# Applies to ALL subdirectories recursively
+# ============================================
+
+# ============ DEPENDENCY DIRECTORIES ============
+node_modules/
+jspm_packages/
+.pnp/
+.pnp.js
+
+# ============ SECRETS & ENVIRONMENT (CRITICAL) ============
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.production
+PRIVATEKEY.MD
+mnemonic.txt
+*.pem
+
+# ============ BUILD OUTPUTS ============
+.next/
+out/
+build/
+dist/
+.vercel/
+artifacts/
+cache/
+typechain/
+typechain-types/
+.turbo/
+.cache/
+
+# ============ SYSTEM & EDITOR JUNK ============
+.DS_Store
+.vscode/
+.idea/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ============ TESTING ============
+coverage/
+.nyc_output/
+
+# ============ OS FILES ============
+Thumbs.db
+desktop.ini
+._*
+
+# ============ MISC ============
+*.tsbuildinfo
+.eslintcache
+.husky/_/
+
+# ============ HARDHAT / FOUNDRY ============
+cache_hardhat/
+deployments/localhost/
+broadcast/
+
+# ============ SUBGRAPH ============
+generated/
+subgraph.yaml.bak

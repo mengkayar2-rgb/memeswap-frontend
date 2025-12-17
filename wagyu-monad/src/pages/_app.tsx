@@ -1,0 +1,130 @@
+import { ResetCSS } from 'packages/uikit'
+import Script from 'next/script'
+import dynamic from 'next/dynamic'
+import BigNumber from 'bignumber.js'
+import GlobalCheckClaimStatus from 'components/GlobalCheckClaimStatus'
+import FixedSubgraphHealthIndicator from 'components/SubgraphHealthIndicator'
+import { ToastListener } from 'contexts/ToastsContext'
+import useEagerConnect from 'hooks/useEagerConnect'
+import { useAccountEventListener } from 'hooks/useAccountEventListener'
+import useSentryUser from 'hooks/useSentryUser'
+import useUserAgent from 'hooks/useUserAgent'
+import type { AppProps } from 'next/app'
+import Head from 'next/head'
+import { Fragment } from 'react'
+import { PersistGate } from 'redux-persist/integration/react'
+import { useStore, persistor } from 'state'
+import { usePollBlockNumber } from 'state/block/hooks'
+import { usePollCoreFarmData } from 'state/farms/hooks'
+import { NextPage } from 'next'
+import { Blocklist, Updaters } from '..'
+import ErrorBoundary from '../components/ErrorBoundary'
+import Menu from '../components/Menu'
+import Providers from '../Providers'
+import GlobalStyle from '../style/Global'
+
+const EasterEgg = dynamic(() => import('components/EasterEgg'), { ssr: false })
+
+// This config is required for number formatting
+BigNumber.config({
+  EXPONENTIAL_AT: 1000,
+  DECIMAL_PLACES: 80,
+})
+
+// Check if Monad chain
+const isMonad = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '143', 10) === 143
+
+function GlobalHooks() {
+  usePollBlockNumber()
+  useEagerConnect()
+  // Farm polling - disabled for Monad (no subgraph)
+  usePollCoreFarmData()
+  useUserAgent()
+  useAccountEventListener()
+  useSentryUser()
+  return null
+}
+
+function MyApp(props: AppProps) {
+  const { pageProps, Component } = props
+  
+  // Safe-guard: handle null/undefined pageProps
+  const safePageProps = pageProps || {}
+  const store = useStore(safePageProps.initialReduxState)
+
+  // Early return if Component is undefined
+  if (!Component) {
+    return <div>Loading...</div>
+  }
+
+  return (
+    <>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5, minimum-scale=1, viewport-fit=cover"
+        />
+        <title>WagyuSwap</title>
+        <meta name="description" content="DEX ON VELAS CHAIN" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, minimum-scale=1" />
+        <meta name="theme-color" content="rgb(222, 37, 73)" />
+        <meta name="twitter:image" content="https://exchange.wagyuswap.xyz/images/hero.png" />
+        <meta
+          name="twitter:description"
+          content="The most popular AMM on VELAS! Earn WAGYU through yield farming or win it in the Lottery, then stake it in Sizzle Pools to earn more tokens! Initial Farm Offerings (new token launch model pioneered by Wagyuswap), NFTs, and more, on a platform you can trust."
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="WagyuSwap - The tastiest multichain dex in the world" />
+      </Head>
+      <Providers store={store}>
+        <Blocklist>
+          <GlobalHooks />
+          <ResetCSS />
+          <GlobalStyle />
+          <GlobalCheckClaimStatus excludeLocations={[]} />
+          <PersistGate loading={null} persistor={persistor}>
+            <Updaters />
+            <App {...props} />
+          </PersistGate>
+        </Blocklist>
+      </Providers>
+    </>
+  )
+}
+
+type NextPageWithLayout = NextPage & {
+  Layout?: React.FC
+}
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+
+const ProductionErrorBoundary = process.env.NODE_ENV === 'production' ? ErrorBoundary : Fragment
+
+const App = ({ Component, pageProps }: AppPropsWithLayout) => {
+  // Safe-guard: handle null/undefined pageProps or Component
+  if (!Component) {
+    return <div>Loading...</div>
+  }
+  
+  // Safe-guard: ensure pageProps is not null
+  const safePageProps = pageProps || {}
+  
+  // Use the layout defined at the page level, if available
+  const Layout = Component.Layout || Fragment
+  return (
+    <ProductionErrorBoundary>
+      <Menu>
+        <Layout>
+          <Component {...safePageProps} />
+        </Layout>
+      </Menu>
+      <EasterEgg iterations={2} />
+      <ToastListener />
+      <FixedSubgraphHealthIndicator />
+    </ProductionErrorBoundary>
+  )
+}
+
+export default MyApp

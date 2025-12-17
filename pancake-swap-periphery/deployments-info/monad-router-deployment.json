@@ -1,0 +1,11 @@
+{
+  "network": "monad",
+  "chainId": 143,
+  "factoryAddress": "0xb48dBe6D4130f4a664075250EE702715748051d9",
+  "routerAddress": "0xbdAc7DBffeeBb33F403eB0ae6bf1A445b9c6f732",
+  "wethAddress": "0xFfDFF1bAb47d8e6D1Da119F5C925fAC91FAfA899",
+  "deployer": "0xc04AfA16f7eAE1a51dc8d5159f113a03dB1DF102",
+  "deploymentTime": "2025-12-11T21:23:54.091Z",
+  "routerTransactionHash": "0x47d2fd0eef9d7a6123fbf0e35261814710d33e34747e5600691d3ce3d8e862e9",
+  "gasUsed": "4794805"
+}

@@ -1,0 +1,66 @@
+{
+  "name": "@pancakeswap-libs/pancake-swap-core",
+  "description": "🎛 Core contracts for the pancake protocol",
+  "version": "0.1.0",
+  "homepage": "https://pancakeswap.finance",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pancakeswap/pancake-swap-core.git"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org"
+  },
+  "files": [
+    "contracts",
+    "build"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.6",
+    "@types/mocha": "^5.2.7",
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-etherscan": "^3.1.7",
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "chai": "^4.2.0",
+    "dotenv": "^16.0.3",
+    "ethereum-waffle": "^2.4.1",
+    "ethereumjs-util": "^6.2.0",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.17.2",
+    "hardhat-deploy": "^0.11.34",
+    "mocha": "^6.2.2",
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.0",
+    "solc": "0.5.16",
+    "truffle-plugin-verify": "^0.4.0",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
+  },
+  "scripts": {
+    "lint": "yarn prettier ./test/*.ts --check",
+    "lint:fix": "yarn prettier ./test/*.ts --write",
+    "clean": "rimraf ./build/ ./cache/ ./artifacts/",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:factory": "hardhat run scripts/deploy-factory.js --network monad",
+    "deploy:factory:local": "hardhat run scripts/deploy-factory.js --network hardhat",
+    "deploy:all": "hardhat deploy --network monad",
+    "verify:factory": "hardhat run scripts/verify-factory.js --network monad",
+    "verify:manual-guide": "hardhat run scripts/manual-verify-guide.js --network monad",
+    "flatten:factory": "hardhat flatten contracts/PancakeFactory.sol > flattened/PancakeFactory-flattened.sol",
+    "test:deployed": "hardhat run scripts/test-deployed-contract.js --network monad",
+    "test:interact": "hardhat run scripts/interact-with-contract.js --network monad",
+    "test:health": "hardhat run scripts/health-check.js --network monad",
+    "test:all": "npm run test:health && npm run test:deployed && npm run test:interact",
+    "node": "hardhat node",
+    "prepublishOnly": "yarn test"
+  },
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "truffle-hdwallet-provider": "^1.0.17",
+    "truffle": "^5.1.41",
+    "truffle-flattener": "^1.4.4"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "multicall3": {
+    "address": "0x752521d2aA5F2EB39b76B4738A7E6a78503fE07e",
+    "deployer": "0xc04AfA16f7eAE1a51dc8d5159f113a03dB1DF102",
+    "transactionHash": "0x1ad15efa4793f9c33c910817eb2a0dad3e04355b4a22b3017e81d31a7f6762ce",
+    "blockNumber": 41427670,
+    "network": "monad",
+    "chainId": 143,
+    "deployedAt": "2025-12-11T22:44:44.513Z"
+  }
+}

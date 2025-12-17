@@ -1,0 +1,18 @@
+{
+  "network": "monad",
+  "chainId": 143,
+  "mmfTokenAddress": "0x28dD3002Ca0040eAc4037759c9b372Ca66051af6",
+  "syrupBarAddress": "0x0FfCe1fDD4ae2A296D8229784797f8fE4A7C9ac0",
+  "masterChefAddress": "0x1cc3Bf03dBe64B1331C8D129308e31EC7a86fAe1",
+  "deployer": "0xc04AfA16f7eAE1a51dc8d5159f113a03dB1DF102",
+  "devAddress": "0xc04AfA16f7eAE1a51dc8d5159f113a03dB1DF102",
+  "tokensPerBlock": "40",
+  "startBlock": "41420664",
+  "preMineAmount": "1000000000",
+  "deploymentTime": "2025-12-11T21:58:05.570Z",
+  "transactionHashes": {
+    "mmfToken": "0xa7f2001b5141523d9b5c2e6e224c2c2694de3bb39c519155354d6917a0ed8850",
+    "syrupBar": "0xe7a6f35cf02bbb2499bd5f508014e9ff8432cdec9b77c354676ede163ff9bda4",
+    "masterChef": "0xd125cfff2acc755b148c28ebc31650cf387b14e759515c33c250bfc529d7a847"
+  }
+}
