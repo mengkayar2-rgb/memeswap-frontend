@@ -2,9 +2,14 @@
   "framework": "nextjs",
   "installCommand": "npm install --legacy-peer-deps --ignore-scripts && npm run typechain",
   "buildCommand": "next build",
+  "outputDirectory": ".next",
   "regions": ["sin1"],
   "env": {
     "NEXT_PUBLIC_CHAIN_ID": "143",
+    "NEXT_PUBLIC_GRAPH_URL": "https://api.goldsky.com/api/public/project_cmj7jnjbsro2301stdkaz9yfm/subgraphs/monad-dex/1.0.0/gn",
     "HUSKY": "0"
-  }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
 }
