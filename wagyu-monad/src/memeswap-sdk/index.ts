@@ -228,8 +228,12 @@ export class Fraction {
     format: object = { groupSeparator: '' },
     rounding: Rounding = Rounding.ROUND_HALF_UP
   ): string {
-    const quotient = this.numerator.toString()
-    return quotient
+    const value = Number(this.numerator.toString()) / Number(this.denominator.toString())
+    // Return with significant digits
+    if (value === 0) return '0'
+    const magnitude = Math.floor(Math.log10(Math.abs(value)))
+    const precision = significantDigits - magnitude - 1
+    return precision >= 0 ? value.toFixed(Math.min(precision, 20)) : value.toPrecision(significantDigits)
   }
 
   toFixed(
@@ -238,6 +242,10 @@ export class Fraction {
     rounding: Rounding = Rounding.ROUND_HALF_UP
   ): string {
     return (Number(this.numerator.toString()) / Number(this.denominator.toString())).toFixed(decimalPlaces)
+  }
+
+  toExact(format: object = { groupSeparator: '' }): string {
+    return (Number(this.numerator.toString()) / Number(this.denominator.toString())).toString()
   }
 }
 
