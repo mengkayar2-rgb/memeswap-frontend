@@ -1,247 +1,89 @@
-import { useQuery, gql } from '@apollo/client'
-import { Token } from '@memeswap/sdk'
+import { TokenAmount, Currency, Pair, Token } from '@memeswap/sdk'
 import { useMemo } from 'react'
+import { Interface } from '@ethersproject/abi'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useMultipleContractSingleData } from '../state/multicall/hooks'
+import { wrappedCurrency } from '../utils/wrappedCurrency'
 
-// Monad chainId
-const MONAD_CHAIN_ID = 143
+// Minimal ABI for getReserves
+const PAIR_ABI = [
+  {
+    constant: true,
+    inputs: [],
+    name: 'getReserves',
+    outputs: [
+      { internalType: 'uint112', name: '_reserve0', type: 'uint112' },
+      { internalType: 'uint112', name: '_reserve1', type: 'uint112' },
+      { internalType: 'uint32', name: '_blockTimestampLast', type: 'uint32' },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+]
 
-// GraphQL query for pairs from subgraph
-const PAIRS_QUERY = gql`
-  query GetPairs {
-    pairs(first: 100, orderBy: reserveUSD, orderDirection: desc) {
-      id
-      token0 {
-        id
-        symbol
-        name
-        decimals
-      }
-      token1 {
-        id
-        symbol
-        name
-        decimals
-      }
-      reserve0
-      reserve1
-      reserveUSD
-      totalSupply
-      volumeUSD
-      txCount
-    }
-  }
-`
+const PAIR_INTERFACE = new Interface(PAIR_ABI)
 
-export interface SubgraphPair {
-  address: string
-  token0: Token
-  token1: Token
-  reserve0: string
-  reserve1: string
-  reserveUSD: string
-  totalSupply: string
-  volumeUSD: string
-  txCount: string
+export enum PairState {
+  LOADING,
+  NOT_EXISTS,
+  EXISTS,
+  INVALID,
 }
 
-export function usePairs(): { pairs: SubgraphPair[]; loading: boolean; error: any } {
-  const queryResult = useQuery(PAIRS_QUERY, {
-    errorPolicy: 'all',
-    notifyOnNetworkStatusChange: true,
-  })
-  
-  // Safe destructuring with defaults
-  const data = queryResult?.data
-  const loading = queryResult?.loading ?? false
-  const error = queryResult?.error ?? null
+export function usePairs(currencies: [Currency | undefined, Currency | undefined][]): [PairState, Pair | null][] {
+  const { chainId } = useActiveWeb3React()
 
-  const pairs = useMemo(() => {
-    // Multiple safe-guards to prevent destructuring errors
-    if (loading) return []
-    if (error) {
-      console.warn('[usePairs] Query error:', error)
-      return []
-    }
-    if (!data) return []
-    if (!data.pairs) return []
-    if (!Array.isArray(data.pairs)) return []
+  const tokens = useMemo(
+    () =>
+      currencies.map(([currencyA, currencyB]) => [
+        wrappedCurrency(currencyA, chainId),
+        wrappedCurrency(currencyB, chainId),
+      ]),
+    [chainId, currencies],
+  )
 
-    return data.pairs
-      .filter((p: any) => p && p.id && p.token0 && p.token1) // Filter invalid pairs
-      .map((p: any) => ({
-        address: p.id || '',
-        token0: new Token(
-          MONAD_CHAIN_ID,
-          p.token0?.id || '0x0000000000000000000000000000000000000000',
-          parseInt(p.token0?.decimals, 10) || 18,
-          p.token0?.symbol || 'UNKNOWN',
-          p.token0?.name || 'Unknown Token'
+  const pairAddresses = useMemo(
+    () =>
+      tokens.map(([tokenA, tokenB]) => {
+        try {
+          return tokenA && tokenB && !tokenA.equals(tokenB) ? Pair.getAddress(tokenA, tokenB) : undefined
+        } catch {
+          return undefined
+        }
+      }),
+    [tokens],
+  )
+
+  const results = useMultipleContractSingleData(pairAddresses, PAIR_INTERFACE, 'getReserves')
+
+  return useMemo(() => {
+    return results.map((result, i) => {
+      const { result: reserves, loading } = result
+      const tokenA = tokens[i][0]
+      const tokenB = tokens[i][1]
+
+      if (loading) return [PairState.LOADING, null]
+      if (!tokenA || !tokenB || tokenA.equals(tokenB)) return [PairState.INVALID, null]
+      if (!reserves) return [PairState.NOT_EXISTS, null]
+      
+      const { _reserve0, _reserve1 } = reserves
+      const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
+      
+      return [
+        PairState.EXISTS,
+        new Pair(
+          new TokenAmount(token0, _reserve0.toString()),
+          new TokenAmount(token1, _reserve1.toString())
         ),
-        token1: new Token(
-          MONAD_CHAIN_ID,
-          p.token1?.id || '0x0000000000000000000000000000000000000000',
-          parseInt(p.token1?.decimals, 10) || 18,
-          p.token1?.symbol || 'UNKNOWN',
-          p.token1?.name || 'Unknown Token'
-        ),
-        reserve0: p.reserve0 || '0',
-        reserve1: p.reserve1 || '0',
-        reserveUSD: p.reserveUSD || '0',
-        totalSupply: p.totalSupply || '0',
-        volumeUSD: p.volumeUSD || '0',
-        txCount: p.txCount || '0',
-      }))
-  }, [data, loading, error])
-
-  return { pairs: pairs || [], loading, error }
+      ]
+    })
+  }, [results, tokens])
 }
 
-// Hook to get a single pair by address
-export function usePairByAddress(pairAddress: string): { pair: SubgraphPair | null; loading: boolean; error: any } {
-  const PAIR_QUERY = gql`
-    query GetPair($id: ID!) {
-      pair(id: $id) {
-        id
-        token0 {
-          id
-          symbol
-          name
-          decimals
-        }
-        token1 {
-          id
-          symbol
-          name
-          decimals
-        }
-        reserve0
-        reserve1
-        reserveUSD
-        totalSupply
-        volumeUSD
-        txCount
-      }
-    }
-  `
-
-  const queryResult = useQuery(PAIR_QUERY, {
-    variables: { id: pairAddress?.toLowerCase() || '' },
-    skip: !pairAddress,
-    errorPolicy: 'all',
-  })
-
-  // Safe destructuring
-  const data = queryResult?.data
-  const loading = queryResult?.loading ?? false
-  const error = queryResult?.error ?? null
-
-  const pair = useMemo(() => {
-    if (loading || error || !data?.pair) return null
-
-    const p = data.pair
-    if (!p || !p.id || !p.token0 || !p.token1) return null
-
-    return {
-      address: p.id || '',
-      token0: new Token(
-        MONAD_CHAIN_ID,
-        p.token0?.id || '0x0000000000000000000000000000000000000000',
-        parseInt(p.token0?.decimals, 10) || 18,
-        p.token0?.symbol || 'UNKNOWN',
-        p.token0?.name || 'Unknown Token'
-      ),
-      token1: new Token(
-        MONAD_CHAIN_ID,
-        p.token1?.id || '0x0000000000000000000000000000000000000000',
-        parseInt(p.token1?.decimals, 10) || 18,
-        p.token1?.symbol || 'UNKNOWN',
-        p.token1?.name || 'Unknown Token'
-      ),
-      reserve0: p.reserve0 || '0',
-      reserve1: p.reserve1 || '0',
-      reserveUSD: p.reserveUSD || '0',
-      totalSupply: p.totalSupply || '0',
-      volumeUSD: p.volumeUSD || '0',
-      txCount: p.txCount || '0',
-    }
-  }, [data, loading, error])
-
-  return { pair, loading, error }
-}
-
-// Hook to search pairs by token
-export function usePairsByToken(tokenAddress: string): { pairs: SubgraphPair[]; loading: boolean; error: any } {
-  const PAIRS_BY_TOKEN_QUERY = gql`
-    query GetPairsByToken($token: String!) {
-      pairs(
-        first: 50
-        orderBy: reserveUSD
-        orderDirection: desc
-        where: { or: [{ token0: $token }, { token1: $token }] }
-      ) {
-        id
-        token0 {
-          id
-          symbol
-          name
-          decimals
-        }
-        token1 {
-          id
-          symbol
-          name
-          decimals
-        }
-        reserve0
-        reserve1
-        reserveUSD
-        totalSupply
-      }
-    }
-  `
-
-  const queryResult = useQuery(PAIRS_BY_TOKEN_QUERY, {
-    variables: { token: tokenAddress?.toLowerCase() || '' },
-    skip: !tokenAddress,
-    errorPolicy: 'all',
-  })
-
-  // Safe destructuring
-  const data = queryResult?.data
-  const loading = queryResult?.loading ?? false
-  const error = queryResult?.error ?? null
-
-  const pairs = useMemo(() => {
-    if (loading || error || !data?.pairs || !Array.isArray(data.pairs)) return []
-
-    return data.pairs
-      .filter((p: any) => p && p.id && p.token0 && p.token1)
-      .map((p: any) => ({
-        address: p.id || '',
-        token0: new Token(
-          MONAD_CHAIN_ID,
-          p.token0?.id || '0x0000000000000000000000000000000000000000',
-          parseInt(p.token0?.decimals, 10) || 18,
-          p.token0?.symbol || 'UNKNOWN',
-          p.token0?.name || 'Unknown Token'
-        ),
-        token1: new Token(
-          MONAD_CHAIN_ID,
-          p.token1?.id || '0x0000000000000000000000000000000000000000',
-          parseInt(p.token1?.decimals, 10) || 18,
-          p.token1?.symbol || 'UNKNOWN',
-          p.token1?.name || 'Unknown Token'
-        ),
-        reserve0: p.reserve0 || '0',
-        reserve1: p.reserve1 || '0',
-        reserveUSD: p.reserveUSD || '0',
-        totalSupply: p.totalSupply || '0',
-        volumeUSD: '0',
-        txCount: '0',
-      }))
-  }, [data, loading, error])
-
-  return { pairs: pairs || [], loading, error }
+export function usePair(tokenA?: Currency, tokenB?: Currency): [PairState, Pair | null] {
+  const input = useMemo<[Currency | undefined, Currency | undefined][]>(() => [[tokenA, tokenB]], [tokenA, tokenB])
+  return usePairs(input)[0]
 }
 
 export default usePairs
