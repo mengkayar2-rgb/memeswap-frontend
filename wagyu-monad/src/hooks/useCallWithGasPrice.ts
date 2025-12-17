@@ -10,6 +10,7 @@ import * as Sentry from '@sentry/react'
 // Monad chain configuration
 const MONAD_CHAIN_ID = 143
 const MONAD_DEFAULT_GAS_PRICE = parseUnits('1.5', 'gwei')
+const MONAD_DEFAULT_GAS_LIMIT = 5000000 // 5 million gas limit for Monad
 const isMonadChain = parseInt(CHAIN_ID, 10) === MONAD_CHAIN_ID
 
 export function useCallWithGasPrice() {
@@ -48,10 +49,12 @@ export function useCallWithGasPrice() {
       const contractMethod = get(contract, methodName)
       const hasManualGasPriceOverride = overrides?.gasPrice
 
-      // For Monad, always use manual gas price if not provided in overrides
-      const finalOverrides = hasManualGasPriceOverride
-        ? { ...overrides }
-        : { ...overrides, gasPrice: effectiveGasPrice }
+      // For Monad, always use manual gas price and gas limit if not provided in overrides
+      const finalOverrides = {
+        ...overrides,
+        gasPrice: hasManualGasPriceOverride ? overrides.gasPrice : effectiveGasPrice,
+        gasLimit: overrides?.gasLimit || (isMonadChain ? MONAD_DEFAULT_GAS_LIMIT : undefined),
+      }
 
       const tx = await contractMethod(...methodArgs, finalOverrides)
 

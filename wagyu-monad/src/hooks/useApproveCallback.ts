@@ -21,8 +21,8 @@ import useGelatoLimitOrdersLib from './limitOrders/useGelatoLimitOrdersLib'
 
 // Monad chain configuration
 const MONAD_CHAIN_ID = 143
-const MONAD_GAS_LIMIT = BigNumber.from(100000)
-const MONAD_GAS_PRICE = parseUnits('1.5', 'gwei')
+const MONAD_GAS_LIMIT = BigNumber.from(500000) // Increased gas limit for Monad
+const MONAD_GAS_PRICE = parseUnits('2', 'gwei') // Slightly higher gas price
 
 // Check if current chain is Monad
 const isMonadChain = parseInt(CHAIN_ID, 10) === MONAD_CHAIN_ID
