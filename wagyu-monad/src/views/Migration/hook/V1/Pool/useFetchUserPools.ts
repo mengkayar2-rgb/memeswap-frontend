@@ -9,7 +9,9 @@ import { CHAIN_ID } from 'config/constants/networks'
 import { PoolCategory } from 'config/constants/types'
 import { serializeTokens } from 'config/constants/tokens'
 import { fetchUserStakeBalances, fetchUserPendingRewards } from './fetchPoolsUser'
-import { ChainId } from '@memeswap/sdk'
+
+// Safe chainId with fallback
+const safeChainId = (CHAIN_ID || '143') as '143' | '111' | '106'
 export interface PoolsState {
   data: SerializedPool
   userDataLoaded: boolean
@@ -48,7 +50,7 @@ export const useFetchUserPools = (account) => {
           const [stakedBalances, pendingRewards, totalStaking] = await Promise.all([
             fetchUserStakeBalances(account),
             fetchUserPendingRewards(account),
-            cakeContract.balanceOf(initialData.data.contractAddress[CHAIN_ID]),
+            cakeContract.balanceOf(initialData.data.contractAddress[safeChainId]),
           ])
 
           const userData = {

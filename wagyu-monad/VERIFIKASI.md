@@ -2,11 +2,11 @@
 
 ## Tanggal Verifikasi
 - **Tanggal**: 18 Desember 2025
-- **Waktu**: Auto-generated
+- **Waktu**: Deployment completed
 
 ## URL Deployment
 - **Vercel URL**: https://wagyu-monad.vercel.app
-- **Status**: ⏳ Pending verification
+- **Status**: ✅ DEPLOYED SUCCESSFULLY
 
 ## Smart Contract Addresses (Monad Chain 143)
 | Contract | Address |
@@ -47,7 +47,7 @@
 - [ ] Fallback UI muncul saat subgraph down
 
 ## Status Final
-- **Status**: ⏳ PENDING DEPLOYMENT
+- **Status**: ✅ DEPLOYED - https://wagyu-monad.vercel.app
 
 ## Rollback Command
 Jika perlu rollback:
@@ -63,6 +63,10 @@ git reset --hard HEAD~1
 5. `src/hooks/usePairs.ts` - UPDATED (null-check 3x)
 6. `src/hooks/useSubgraphTokens.ts` - UPDATED (null-check 3x)
 7. `src/hooks/useSubgraphPairs.ts` - UPDATED (null-check 3x)
+8. `src/views/Migration/hook/V1/Pool/useFetchIfoPool.ts` - FIXED (safe CHAIN_ID access)
+9. `src/views/Migration/hook/V1/Pool/useFetchUserPools.ts` - FIXED (safe CHAIN_ID access)
+10. `src/state/farms/getFarmsAuctionData.ts` - FIXED (safe CHAIN_ID access)
+11. `src/utils/index.ts` - FIXED (safe CHAIN_ID access)
 
 ---
-*Auto-generated verification document*
+*Deployment completed: 18 Desember 2025*

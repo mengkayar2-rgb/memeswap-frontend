@@ -17,7 +17,10 @@ import addresses from 'config/constants/addresses.json'
 import { CHAIN_ID } from 'config/constants/networks'
 
 export const ifoPoolV1Contract = '0x1B2A2f6ed4A1401E8C73B4c2B6172455ce2f78E8'
-export const cakeVaultAddress = addresses[CHAIN_ID].WagyuVault
+
+// Safe access with fallback to prevent build errors
+const chainIdKey = (CHAIN_ID || '143') as keyof typeof addresses
+export const cakeVaultAddress = addresses[chainIdKey]?.WagyuVault || '0x0000000000000000000000000000000000000000'
 
 const getCakeVaultContract = (signer?: Signer | Provider) => {
   const signerOrProvider = signer ?? simpleRpcProvider

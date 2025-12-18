@@ -14,6 +14,9 @@ import { ROUTER_ADDRESS } from '../config/constants'
 import { BASE_VELAS_SCAN_URLS } from '../config'
 import { simpleRpcProvider } from './providers'
 
+// Safe chainId with fallback
+const safeChainId = parseInt(CHAIN_ID || '143', 10)
+
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
   try {
@@ -95,7 +98,7 @@ export function getContract(address: string, ABI: any, signer?: Signer | Provide
 // account is optional
 export function getRouterContract(_: number, library: Web3Provider, account?: string) {
   return getContract(
-    ROUTER_ADDRESS[CHAIN_ID],
+    ROUTER_ADDRESS[safeChainId] || ROUTER_ADDRESS[143],
     IPancakeRouter02ABI,
     getProviderOrSigner(library, account),
   ) as IPancakeRouter02
