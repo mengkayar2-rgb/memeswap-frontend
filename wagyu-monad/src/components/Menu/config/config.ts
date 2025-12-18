@@ -38,19 +38,14 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
         label: t('Swap'),
         href: '/swap',
       },
-      // {
-      //   label: t('Limit'),
-      //   href: '/limit-orders',
-      // },
       {
         label: t('Liquidity'),
         href: '/liquidity',
       },
-      // {
-      //   label: t('Perpetual'),
-      //   href: `https://perp.pancakeswap.finance/${perpLangMap(languageCode)}/futures/BTCUSDT`,
-      //   type: DropdownMenuItemType.EXTERNAL_LINK,
-      // },
+      {
+        label: t('Create Pair'),
+        href: '/add',
+      },
     ],
   },
   // Farms/Pools disabled for Monad (no subgraph)

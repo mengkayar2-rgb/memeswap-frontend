@@ -1,10 +1,15 @@
 import { useCallback } from 'react'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Contract, CallOverrides } from '@ethersproject/contracts'
+import { parseUnits } from '@ethersproject/units'
 import get from 'lodash/get'
 
+// Monad gas settings - HARDCODED for chain 143
+const MONAD_GAS_LIMIT = 150000 // Safe gas limit for Monad
+const MONAD_GAS_PRICE = parseUnits('1.5', 'gwei') // 1.5 gwei
+
 /**
- * Simplified hook - let MetaMask handle gas estimation
+ * Hook with hardcoded gas settings for Monad chain 143
  */
 export function useCallWithGasPrice() {
   const callWithGasPrice = useCallback(
@@ -16,8 +21,14 @@ export function useCallWithGasPrice() {
     ): Promise<TransactionResponse> => {
       const contractMethod = get(contract, methodName)
       
-      // Let MetaMask handle gas - pass only user overrides if any
-      const tx = await contractMethod(...methodArgs, overrides || {})
+      // Monad gas settings - hardcoded
+      const gasSettings = {
+        gasLimit: MONAD_GAS_LIMIT,
+        gasPrice: MONAD_GAS_PRICE,
+        ...overrides,
+      }
+      
+      const tx = await contractMethod(...methodArgs, gasSettings)
       return tx
     },
     [],

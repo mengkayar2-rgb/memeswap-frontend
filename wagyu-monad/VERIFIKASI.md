@@ -1,12 +1,12 @@
 # VERIFIKASI MEMESWAP DEPLOYMENT
 
 ## Tanggal Verifikasi
-- **Tanggal**: 18 Desember 2025
-- **Waktu**: Deployment completed
+- **Tanggal**: 19 Desember 2025
+- **Waktu**: Deployment completed with Create Pair menu
 
 ## URL Deployment
 - **Vercel URL**: https://wagyu-monad.vercel.app
-- **Status**: ✅ DEPLOYED SUCCESSFULLY
+- **Status**: ✅ DEPLOYED SUCCESSFULLY - CREATE PAIR ENABLED
 
 ## Smart Contract Addresses (Monad Chain 143)
 | Contract | Address |
@@ -67,6 +67,17 @@ git reset --hard HEAD~1
 9. `src/views/Migration/hook/V1/Pool/useFetchUserPools.ts` - FIXED (safe CHAIN_ID access)
 10. `src/state/farms/getFarmsAuctionData.ts` - FIXED (safe CHAIN_ID access)
 11. `src/utils/index.ts` - FIXED (safe CHAIN_ID access)
+12. `src/components/Menu/config/config.ts` - ADDED "Create Pair" menu item
+13. `src/hooks/useCallWithGasPrice.ts` - FIXED gas settings (150k limit, 1.5 gwei)
+
+## Gas Settings (Monad Chain 143)
+- **Gas Limit**: 150,000
+- **Gas Price**: 1.5 gwei
+
+## Menu Items
+- ✅ Swap
+- ✅ Liquidity  
+- ✅ Create Pair (NEW)
 
 ---
-*Deployment completed: 18 Desember 2025*
+*Deployment completed: 19 Desember 2025*
