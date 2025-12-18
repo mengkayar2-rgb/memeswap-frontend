@@ -1,0 +1,40 @@
+diff --git a/node_modules/@pancakeswap-libs/sdk/dist/index.js b/node_modules/@pancakeswap-libs/sdk/dist/index.js
+index 2e12c95..afce06d 100644
+--- a/node_modules/@pancakeswap-libs/sdk/dist/index.js
++++ b/node_modules/@pancakeswap-libs/sdk/dist/index.js
+@@ -1,8 +1,4 @@
+ 
+ 'use strict'
+ 
+-if (process.env.NODE_ENV === 'production') {
+-  module.exports = require('./sdk.cjs.production.min.js')
+-} else {
+-  module.exports = require('./sdk.cjs.development.js')
+-}
++module.exports = require('./sdk.cjs.development.js')
+diff --git a/node_modules/@pancakeswap-libs/sdk/dist/sdk.cjs.development.js b/node_modules/@pancakeswap-libs/sdk/dist/sdk.cjs.development.js
+index 5bd9f54..d41fe2b 100644
+--- a/node_modules/@pancakeswap-libs/sdk/dist/sdk.cjs.development.js
++++ b/node_modules/@pancakeswap-libs/sdk/dist/sdk.cjs.development.js
+@@ -35,7 +35,7 @@ var _SOLIDITY_TYPE_MAXIMA;
+   Rounding[Rounding["ROUND_UP"] = 2] = "ROUND_UP";
+ })(exports.Rounding || (exports.Rounding = {}));
+ 
+-var FACTORY_ADDRESS = '0xBCfCcbde45cE874adCB698cC183deBcF17952812';
++var FACTORY_ADDRESS = '0xb48dBe6D4130f4a664075250EE702715748051d9';
+ var INIT_CODE_HASH = '0xd0d4c4cd0848c93cb4fd1f498d7013ee6bfb25783ea21593d5834f5d250ece66';
+ var MINIMUM_LIQUIDITY = /*#__PURE__*/JSBI.BigInt(1000); // exports for internal consumption
+ 
+diff --git a/node_modules/@pancakeswap-libs/sdk/dist/sdk.esm.js b/node_modules/@pancakeswap-libs/sdk/dist/sdk.esm.js
+index af6f31c..5fb9663 100644
+--- a/node_modules/@pancakeswap-libs/sdk/dist/sdk.esm.js
++++ b/node_modules/@pancakeswap-libs/sdk/dist/sdk.esm.js
+@@ -35,7 +35,7 @@ var Rounding;
+   Rounding[Rounding["ROUND_UP"] = 2] = "ROUND_UP";
+ })(Rounding || (Rounding = {}));
+ 
+-var FACTORY_ADDRESS = '0xBCfCcbde45cE874adCB698cC183deBcF17952812';
++var FACTORY_ADDRESS = '0xb48dBe6D4130f4a664075250EE702715748051d9';
+ var INIT_CODE_HASH = '0xd0d4c4cd0848c93cb4fd1f498d7013ee6bfb25783ea21593d5834f5d250ece66';
+ var MINIMUM_LIQUIDITY = /*#__PURE__*/JSBI.BigInt(1000); // exports for internal consumption
+ 

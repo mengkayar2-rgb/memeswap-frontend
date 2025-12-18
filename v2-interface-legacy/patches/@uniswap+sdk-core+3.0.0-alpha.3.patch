@@ -1,0 +1,26 @@
+diff --git a/node_modules/@uniswap/sdk-core/dist/sdk-core.cjs.development.js b/node_modules/@uniswap/sdk-core/dist/sdk-core.cjs.development.js
+index 29f7a7c..689dec7 100644
+--- a/node_modules/@uniswap/sdk-core/dist/sdk-core.cjs.development.js
++++ b/node_modules/@uniswap/sdk-core/dist/sdk-core.cjs.development.js
+@@ -574,7 +574,7 @@ var _WETH;
+  * Known WETH9 implementation addresses, used in our implementation of Ether#wrapped
+  */
+ 
+-var WETH9 = (_WETH = {}, _WETH[1] = /*#__PURE__*/new Token(1, '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', 18, 'WETH9', 'Wrapped Ether'), _WETH[3] = /*#__PURE__*/new Token(3, '0xc778417E063141139Fce010982780140Aa0cD5Ab', 18, 'WETH9', 'Wrapped Ether'), _WETH[4] = /*#__PURE__*/new Token(4, '0xc778417E063141139Fce010982780140Aa0cD5Ab', 18, 'WETH9', 'Wrapped Ether'), _WETH[5] = /*#__PURE__*/new Token(5, '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6', 18, 'WETH9', 'Wrapped Ether'), _WETH[42] = /*#__PURE__*/new Token(42, '0xd0A1E359811322d97991E03f863a0C30C2cF029C', 18, 'WETH9', 'Wrapped Ether'), _WETH);
++var WETH9 = (_WETH = {}, _WETH[1] = /*#__PURE__*/new Token(1, '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', 18, 'WETH9', 'Wrapped Ether'), _WETH[3] = /*#__PURE__*/new Token(3, '0xc778417E063141139Fce010982780140Aa0cD5Ab', 18, 'WETH9', 'Wrapped Ether'), _WETH[4] = /*#__PURE__*/new Token(4, '0xc778417E063141139Fce010982780140Aa0cD5Ab', 18, 'WETH9', 'Wrapped Ether'), _WETH[5] = /*#__PURE__*/new Token(5, '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6', 18, 'WETH9', 'Wrapped Ether'), _WETH[42] = /*#__PURE__*/new Token(42, '0xd0A1E359811322d97991E03f863a0C30C2cF029C', 18, 'WETH9', 'Wrapped Ether'), _WETH[143] = /*#__PURE__*/new Token(143, '0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A', 18, 'WMON', 'Wrapped Monad'), _WETH);
+ 
+ /**
+  * Ether is the main usage of a 'native' currency, i.e. for Ethereum mainnet and all testnets
+diff --git a/node_modules/@uniswap/sdk-core/dist/sdk-core.esm.js b/node_modules/@uniswap/sdk-core/dist/sdk-core.esm.js
+index 01b2fea..97024b9 100644
+--- a/node_modules/@uniswap/sdk-core/dist/sdk-core.esm.js
++++ b/node_modules/@uniswap/sdk-core/dist/sdk-core.esm.js
+@@ -572,7 +572,7 @@ var _WETH;
+  * Known WETH9 implementation addresses, used in our implementation of Ether#wrapped
+  */
+ 
+-var WETH9 = (_WETH = {}, _WETH[1] = /*#__PURE__*/new Token(1, '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', 18, 'WETH9', 'Wrapped Ether'), _WETH[3] = /*#__PURE__*/new Token(3, '0xc778417E063141139Fce010982780140Aa0cD5Ab', 18, 'WETH9', 'Wrapped Ether'), _WETH[4] = /*#__PURE__*/new Token(4, '0xc778417E063141139Fce010982780140Aa0cD5Ab', 18, 'WETH9', 'Wrapped Ether'), _WETH[5] = /*#__PURE__*/new Token(5, '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6', 18, 'WETH9', 'Wrapped Ether'), _WETH[42] = /*#__PURE__*/new Token(42, '0xd0A1E359811322d97991E03f863a0C30C2cF029C', 18, 'WETH9', 'Wrapped Ether'), _WETH);
++var WETH9 = (_WETH = {}, _WETH[1] = /*#__PURE__*/new Token(1, '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', 18, 'WETH9', 'Wrapped Ether'), _WETH[3] = /*#__PURE__*/new Token(3, '0xc778417E063141139Fce010982780140Aa0cD5Ab', 18, 'WETH9', 'Wrapped Ether'), _WETH[4] = /*#__PURE__*/new Token(4, '0xc778417E063141139Fce010982780140Aa0cD5Ab', 18, 'WETH9', 'Wrapped Ether'), _WETH[5] = /*#__PURE__*/new Token(5, '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6', 18, 'WETH9', 'Wrapped Ether'), _WETH[42] = /*#__PURE__*/new Token(42, '0xd0A1E359811322d97991E03f863a0C30C2cF029C', 18, 'WETH9', 'Wrapped Ether'), _WETH[143] = /*#__PURE__*/new Token(143, '0x3bd359C1119dA7Da1D913D1C4D2B7c461115433A', 18, 'WMON', 'Wrapped Monad'), _WETH);
+ 
+ /**
+  * Ether is the main usage of a 'native' currency, i.e. for Ethereum mainnet and all testnets

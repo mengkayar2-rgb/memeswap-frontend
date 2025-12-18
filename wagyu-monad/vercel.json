@@ -1,7 +1,7 @@
 {
   "framework": "nextjs",
   "installCommand": "npm install --legacy-peer-deps --ignore-scripts && npm run typechain",
-  "buildCommand": "NODE_OPTIONS=--openssl-legacy-provider next build",
+  "buildCommand": "next build",
   "outputDirectory": ".next",
   "regions": ["sin1"],
   "env": {

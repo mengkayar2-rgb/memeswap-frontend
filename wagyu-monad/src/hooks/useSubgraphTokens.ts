@@ -40,31 +40,67 @@ export function useSubgraphTokens(): { tokens: SubgraphToken[]; loading: boolean
   const error = queryResult?.error ?? null
 
   const tokens = useMemo(() => {
-    // Multiple safe-guards to prevent destructuring errors
-    if (loading) return []
+    // NULL-CHECK 1: Check loading state
+    if (loading) {
+      console.log('[useSubgraphTokens] Still loading...')
+      return []
+    }
+    
+    // NULL-CHECK 2: Check error state
     if (error) {
       console.warn('[useSubgraphTokens] Query error:', error)
       return []
     }
-    if (!data) return []
-    if (!data.tokens) return []
-    if (!Array.isArray(data.tokens)) return []
+    
+    // NULL-CHECK 3: Check data existence and structure
+    if (!data) {
+      console.log('[useSubgraphTokens] No data received')
+      return []
+    }
+    if (!data.tokens) {
+      console.log('[useSubgraphTokens] No tokens in data')
+      return []
+    }
+    if (!Array.isArray(data.tokens)) {
+      console.warn('[useSubgraphTokens] tokens is not an array')
+      return []
+    }
+    if (data.tokens.length === 0) {
+      console.log('[useSubgraphTokens] Empty tokens array')
+      return []
+    }
 
+    // Parse with strict filtering
     return data.tokens
-      .filter((t: any) => t && t.id) // Filter invalid tokens
-      .map((t: any) => ({
-        address: t.id || '',
-        token: new Token(
-          MONAD_CHAIN_ID,
-          t.id || '0x0000000000000000000000000000000000000000',
-          parseInt(t.decimals, 10) || 18,
-          t.symbol || 'UNKNOWN',
-          t.name || 'Unknown Token'
-        ),
-        totalLiquidity: t.totalLiquidity || '0',
-        tradeVolumeUSD: t.tradeVolumeUSD || '0',
-        txCount: t.txCount || '0',
-      }))
+      .filter((t: any) => {
+        // Strict validation: must have id
+        if (!t) return false
+        if (!t.id) return false
+        if (typeof t.id !== 'string') return false
+        if (t.id.length !== 42) return false // Valid address length
+        return true
+      })
+      .map((t: any) => {
+        try {
+          return {
+            address: t.id || '',
+            token: new Token(
+              MONAD_CHAIN_ID,
+              t.id || '0x0000000000000000000000000000000000000000',
+              parseInt(t.decimals, 10) || 18,
+              t.symbol || 'UNKNOWN',
+              t.name || 'Unknown Token'
+            ),
+            totalLiquidity: t.totalLiquidity || '0',
+            tradeVolumeUSD: t.tradeVolumeUSD || '0',
+            txCount: t.txCount || '0',
+          }
+        } catch (err) {
+          console.warn('[useSubgraphTokens] Error parsing token:', t.id, err)
+          return null
+        }
+      })
+      .filter(Boolean) // Remove any null entries from failed parsing
   }, [data, loading, error])
 
   return { tokens: tokens || [], loading, error }
